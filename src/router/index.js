@@ -5,8 +5,14 @@ import LoginView from '../views/LoginView.vue'
 import ContactUsView from '@/views/ContactUsView.vue'
 import DashboardView from '@/views/Dashboard/DashboardView.vue'
 import VansView from '@/views/Dashboard/Vans/VansView.vue'
+import Fleet from '@/views/Fleet.vue'
 
 const routes = [
+  {
+    path: '/Fleet',
+    name: 'Fleet',
+    component: Fleet
+  },
   {
     path: '/',
     name: 'home',
@@ -51,5 +57,6 @@ const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes
 })
+
 
 export default router

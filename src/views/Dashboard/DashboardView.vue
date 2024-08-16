@@ -6,6 +6,7 @@
     <a href="/vans"><button>Manage Vans</button></a>
     <button>Manage Rentals</button>
     <button>Manage Insurance</button>
+    <a href="/fleet-list"><button>Fleet And Rentals</button></a>
     <button>Show all statistics</button>
   </div>
 

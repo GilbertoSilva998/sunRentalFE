@@ -10,6 +10,18 @@
   <img src="" alt="">
 </template>
 
+<script>
+import VansView from "@/views/Dashboard/Vans/VansView.vue";
+
+export default {
+  name : 'App',
+  compents: {
+    VansView
+
+  }
+}
+
+</script>
 <style>
 #app {
   display: flex;
