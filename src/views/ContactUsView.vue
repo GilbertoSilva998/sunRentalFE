@@ -88,7 +88,7 @@ export default {
   },
   methods: {
     async submitForm() {
-      // Check if the email and confirm email fields match
+      //Checking here if the email and confirm email matches
       if (this.form.email !== this.form.confirmEmail) {
         this.responseMessage = 'Email and Confirm Email must match.';
         return;
