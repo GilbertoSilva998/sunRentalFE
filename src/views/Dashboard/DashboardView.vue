@@ -1,6 +1,9 @@
 <template>
   <Header/>
-
+  <br/>
+  <br/>
+  <br/>
+  <br/>
   <div class="dashboard">
     <button>Manage Customers</button>
     <a href="/vans"><button>Manage Vans</button></a>

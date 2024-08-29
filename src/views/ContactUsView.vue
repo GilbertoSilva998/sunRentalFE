@@ -1,6 +1,9 @@
 <template>
   <div>
     <Header />
+    <br/>
+    <br/>
+    <br/>
     <div class="contact-us">
       <div class="contact-text">
         <h2>Contact Sun Rentals</h2>

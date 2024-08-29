@@ -59,14 +59,16 @@ main {
 
 .header {
   background-color: white;
-    /* position: fixed; */
+    position: fixed;
     top: 0;
     left: 0;
     right: 0;
+    margin-bottom: 60px;
     height: 80px;
     display: flex;
     align-items: center;
     box-shadow: 0 0 25px 0 black;
+
 }
 
 .header * {
