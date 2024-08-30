@@ -121,8 +121,9 @@ export default {
       try {
         const response = await axios.put('http://localhost:8088/admin/update', this.admin);
         if (response.status === 200) {
-          this.resetForm();
           this.responseMessage = 'Admin successfully updated!';
+          await this.fetchAdmins();
+          this.resetForm();
         } else {
           this.responseMessage = 'Failed to update admin.';
         }
@@ -130,11 +131,17 @@ export default {
         console.error('Error updating admin:', error);
         this.responseMessage = 'Failed to update admin.';
       }
-    },
+    }
+    ,
     editAdmin(admin) {
       this.admin = { ...admin };
       this.isEditing = true;
       this.showSection('update');
+    },
+    deleteAdmin(admin) {
+      this.admin = { ...admin };
+      this.isDeleting = true;
+      this.showSection('delete');
     },
     resetForm() {
       this.admin = {
@@ -283,3 +290,4 @@ h2 {
   background-color: darkorange;
 }
 </style>
+
