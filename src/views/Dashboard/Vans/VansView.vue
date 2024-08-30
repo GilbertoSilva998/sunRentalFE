@@ -22,7 +22,15 @@
             </div>
 
             <div class="form-group">
-                <input type="text" id="year" v-model="form.year" placeholder="Enter year" required>
+                <input
+                    type="number"
+                    id="year"
+                    v-model="form.year"
+                    @input="validateForm"
+                    maxlength="4"
+                    placeholder="Enter year 4-digit" required>
+<!--            Display Error Message if validation fails-->
+              <span v-if="yearError">{{ yearError}}</span>
             </div>
 
             <div class="form-group">
@@ -30,7 +38,11 @@
             </div>
 
             <div class="form-group">
-                <input type="text" id="capacity" v-model="form.capacity" placeholder="Enter capacity" required>
+                <input
+                    type="number"
+                    id="capacity"
+                    v-model="form.capacity"
+                    placeholder="Enter capacity" required>
             </div>
 
             <div class="form-group">
@@ -39,8 +51,8 @@
           <label>Rental Status</label>
             <div class="form-group">
                 <select v-model="form.rentalStatus" required>
-                  <option :value="true">Available</option>
-                  <option :value="false">Not Available</option>
+                  <option :value="true">Rented</option>
+                  <option :value="false">Returned</option>
                 </select>
             </div>
 
@@ -112,7 +124,7 @@
 <script>
 import Footer from '@/layout/Footer.vue';
 import Header from '@/layout/Header.vue';
-import ApiService from '@/services/AxiosServiceVans';//Fetch all the apis
+import ApiService from '@/services/AxiosServiceVans';//Fetch all vans api
 
 
 export default {
@@ -132,8 +144,9 @@ export default {
           capacity: null,
           fuelType: '',
           rentalStatus: true,
-          image: []
+          image: [],
         },
+        yearError: null,
         isEditMode: false,
         vanGet: [],
         errors: []
@@ -145,6 +158,25 @@ export default {
   },
   //Methods
   methods:{
+    // Validation for  Year and Capacity
+    validateForm(){
+      this.errors = [];
+      const yearPattern = /^\d{4}$/;
+
+      //Validate year (4 digits)
+      if (!yearPattern.test(this.form.year)){
+        this.yearError = 'Year must be 4-digit number';
+      }else {
+        this.yearError = null;
+      }
+
+    //   //Validate capacity (4 digit)
+    //   if (!/^\d{4}$/.test(this.form.capacity)){
+    //     this.errors.push("Capacity must be a 4-digit number.")
+    //   }
+      return this.yearError === null;
+    },
+
     async getVans(){
       try {
         const response = await ApiService.getVans('http://localhost:8080/van/allVans');
@@ -164,6 +196,12 @@ export default {
       }
     },
       async submitVan(){
+      //Call validateForm before proceeding
+        if (!this.validateForm()){
+          console.error('Form validation failed', this.errors);
+          return;//Stop the form submission if validation fails
+        }
+
         try {
           //Convert year and capacity to integers
           this.form.year = parseInt(this.form.year, 10);
@@ -214,6 +252,7 @@ export default {
         rentalStatus: true,
         image: []
       };
+          this.yearError = null; //Reset Error message
           this.isEditMode= false;
     }
   }
