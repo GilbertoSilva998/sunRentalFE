@@ -1,7 +1,8 @@
 <template>
-  <div class="home">
+
     <Header />
 
+  <div class="home">
     <!-- Hero Section -->
     <section class="hero">
       <div class="hero-content">
