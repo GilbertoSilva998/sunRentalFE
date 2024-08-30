@@ -12,7 +12,7 @@
         <router-link to="#" class="nav-link">Branches</router-link>
         <router-link to="/about" class="nav-link">About</router-link>
         <router-link to="/contactUs" class="nav-link">Contact Us</router-link>
-        <router-link to="/dashboard" class="nav-link">Dashboard</router-link>
+<!--<router-link to="/dashboard" class="nav-link">Dashboard</router-link>         -->
         <router-link to="/signup" class="nav-link">Sign Up</router-link>
         <router-link to="/login" class="nav-link">Login</router-link>
       </nav>

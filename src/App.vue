@@ -85,7 +85,7 @@ header li a {
   position: top;
   /* padding: 30px;  */
   color: gray-800;
-  
+
 }
 
 .nav a {
@@ -96,8 +96,8 @@ header li a {
   text-transform: uppercase;
   font-size: .875rem;
   letter-spacing: .05px;
-  
-  
+
+
 }
 
 nav a.router-link-exact-active {
@@ -134,7 +134,7 @@ nav a.router-link-exact-active {
   color: #fff;
   padding: 10px;
   margin-top: 180px;
-  
+
 }
 
 .register input, .login input{
@@ -180,7 +180,7 @@ nav a.router-link-exact-active {
 
 .image {
   margin-right: 30px; /* Space between image and text */
-  
+
 }
 
 .text {
