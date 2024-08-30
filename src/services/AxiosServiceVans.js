@@ -3,27 +3,25 @@ import axios from "axios";
 export const apiClient= axios.create({
     baseURL: 'http://localhost:8080',
     headers: {
-        'Content-Type' : "application/json"
+        Authorization : 'Bearer {token}'
     }
 });
 
-//const apiClient = 'http://localhost:8080/'
-
 export default {
     getVans(){
-        return apiClient.get('/vans');
+        return apiClient.get('/van/allVans');
     },
-    getVan(id){
-        return apiClient.get(`/vans/${id}`);
+    getVan(licensePlate){
+        return apiClient.get(`/van/read/${licensePlate}`);
     },
     createVan (van){
-        return apiClient.post('/vans', van);
+        return apiClient.post('/van/create', van);
     },
-    updateVan(id, van){
-        return apiClient.put(`/vans/${id}`, van);
+    updateVan(van){
+        return apiClient.put(`/van/update`, van);
     },
-    deleteVan(id){
-        return apiClient.delete(`/vans/${id}`)
+    deleteVan(licensePlate){
+        return apiClient.delete(`/van/deleteById/${licensePlate}`)
     }
 
 };

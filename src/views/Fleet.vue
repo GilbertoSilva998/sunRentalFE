@@ -2,7 +2,10 @@
   <div>
     <!-- Include Header Component -->
     <Header />
-
+    <br/>
+    <br/>
+    <br/>
+    <br/>
     <div class="fleet-list">
       <div v-for="van in fleet" :key="van.id" class="van-card">
         <img :src="van.imageUrl" :alt="van.name" class="van-image" />

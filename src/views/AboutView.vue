@@ -1,5 +1,8 @@
 <template>
   <Header/>
+  <br/>
+  <br/>
+  <br/>
   <div class="about">
     <header class="head">
       <h1>About Sun Rentals</h1>
