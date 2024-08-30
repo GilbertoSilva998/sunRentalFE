@@ -1,6 +1,10 @@
 <template>
   <div class="page-container">
     <Header />
+    <br/>
+    <br/>
+    <br/>
+    <br/>
     <div class="content">
       <div class="login-container">
         <h1>Login</h1>

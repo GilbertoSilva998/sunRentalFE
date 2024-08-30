@@ -8,12 +8,18 @@ import AdminDashboard from '@/components/AdminDashboard.vue'; // Update with the
 import VansView from '@/views/Dashboard/Vans/VansView.vue'
 import manageAdmins from "@/views/ManageAdmins.vue";
 import Fleet from '@/views/Fleet.vue'
+import Booking from "@/views/Booking.vue";
 
 const routes = [
   {
     path: '/Fleet',
     name: 'Fleet',
     component: Fleet
+  },
+  {
+    path: '/Booking',
+    name: '/Booking',
+    component: Booking
   },
   {
     path: '/',
