@@ -33,15 +33,17 @@ export default {
   flex-direction: column;
   align-items: center;
   width: 100%;
-  background-color: #333;
-  color: #fff;
 }
 
 .header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 100%;
   padding: 10px 20px;
   background-color: #444;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -80,5 +82,10 @@ export default {
 
 .nav-link:active {
   color: #ff8c00;
+}
+
+/* Ensure the content does not hide behind the fixed header */
+.nav + .router-view {
+  margin-top: 80px; /* Adjust this value based on the header height */
 }
 </style>
