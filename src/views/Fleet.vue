@@ -15,6 +15,8 @@
       class="search-box"
       />
     </div>
+    <br/>
+    <br/>
 
     <div class="fleet-list">
 <!--      Display Vans-->
@@ -22,10 +24,12 @@
         <img :src="`http://localhost:8080/van/image/${van.licensePlate}`" :alt="van.name" class="van-image" />
         <h2>{{ van.make }}</h2>
         <p>{{van.licensePlate}}</p>
-        <p>{{ van.year }}</p>
+        <p>Model: {{van.model}}</p>
+        <p>Year: {{ van.year }}</p>
         <p>Capacity: {{ van.capacity }}</p>
+        <a href="/Booking"><button>Book now</button></a>
 <!--        <p>Price per day: R{{ van.pricePerDay }}</p>-->
-        <p v-if="van.rentalStatus" class="not-available">Rented</p>
+<!--        <p v-if="van.rentalStatus" class="not-available">Rented</p>-->
 
       </div>
     </div>

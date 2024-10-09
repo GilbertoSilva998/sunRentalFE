@@ -86,7 +86,7 @@ export default {
   methods: {
     async fetchAdmins() {
       try {
-        const response = await axios.get('http://localhost:8088/admin/allAdmins');
+        const response = await axios.get('http://localhost:8080/admin/allAdmins');
         this.admins = response.data;
       } catch (error) {
         console.error('Error fetching admins:', error);
@@ -94,7 +94,7 @@ export default {
     },
     async addAdmin() {
       try {
-        const response = await axios.post('http://localhost:8088/admin/create', this.admin);
+        const response = await axios.post('http://localhost:8080/admin/create', this.admin);
         this.admins.push(response.data);
         this.resetForm();
         this.responseMessage = 'Admin successfully added!';
@@ -105,7 +105,7 @@ export default {
     },
     async deleteAdminById() {
       try {
-        const response = await axios.delete(`http://localhost:8088/admin/delete/${this.adminIdToDelete}`);
+        const response = await axios.delete(`http://localhost:8080/admin/delete/${this.adminIdToDelete}`);
         if (response.status === 200) {
           this.admins = this.admins.filter(admin => admin.adminId !== this.adminIdToDelete);
           this.responseMessage = 'Admin successfully deleted!';
@@ -119,7 +119,7 @@ export default {
     },
     async updateAdmin() {
       try {
-        const response = await axios.put('http://localhost:8088/admin/update', this.admin);
+        const response = await axios.put('http://localhost:8080/admin/update', this.admin);
         if (response.status === 200) {
           this.responseMessage = 'Admin successfully updated!';
           await this.fetchAdmins();
@@ -186,7 +186,9 @@ export default {
 }
 
 .logo {
-  height: 40px;
+  height: 50px;
+  width: auto;
+  transition: transform 0.3s ease;
 }
 
 .back-button {

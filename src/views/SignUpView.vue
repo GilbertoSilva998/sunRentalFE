@@ -5,11 +5,6 @@
     <h2>Let's Get Started</h2>
     <form @submit.prevent="submitForm">
       <div class="form-group">
-        <label for="id">ID:</label>
-        <input type="number" v-model="form.id" id="id" required />
-      </div>
-
-      <div class="form-group">
         <label for="firstName">First Name:</label>
         <input type="text" v-model="form.firstName" id="firstName" required />
       </div>
@@ -58,7 +53,6 @@ export default {
   data() {
     return {
       form: {
-        id: null, // Initialize id to null or a default value
         firstName: "",
         lastName: "",
         email: "",
@@ -73,7 +67,7 @@ export default {
     async submitForm() {
       try {
         const response = await axios.post(
-            "http://localhost:8089/customers/create",
+            "http://localhost:8080/customers/create",
             this.form,
             {
               headers: {
@@ -85,7 +79,6 @@ export default {
         this.responseMessage = "Registration successfully sent";
         // Reset the form after successful submission
         this.form = {
-          id: null,
           firstName: "",
           lastName: "",
           email: "",
@@ -149,6 +142,3 @@ button:hover {
   transition: 0.7s;
 }
 </style>
-
-
-

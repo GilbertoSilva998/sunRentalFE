@@ -1,10 +1,13 @@
 <template xmlns="http://www.w3.org/1999/html">
-    <Header/>
+
+  <div class="manage-admins-container">
+
+    <div class="custom-header">
+      <img src="@/assets/SunRentalsWB.png" alt="Website Logo" class="logo" />
+      <button @click="goBack" class="back-button">Back to Dashboard</button>
+    </div>
+
     <br/>
-    <br/>
-    <br/>
-<!--        <h1>Add Vans</h1>-->
-        <br/>
         <h2>{{ isEditMode ? 'Edit' : 'Add' }} Van</h2>
 <!--      Form Code Start -->
         <form class="register" @submit.prevent="submitVan">
@@ -113,10 +116,10 @@
         </tr>
       </tbody>
     </table>
-<!--        Table Code finish here-->
-  </div>
+<!--Table Code finish here-->
     </div>
-
+    </div>
+  </div>
   <Footer/>
 </template>
 
@@ -240,6 +243,9 @@ export default {
         console.error('Error deleting van: ', error);
       }
     },
+    goBack() {
+      this.$router.push('/admin-dashboard');
+    },
     resetForm(){
       this.form ={
         licensePlate: '',
@@ -294,4 +300,38 @@ export default {
       border-right: 1px solid orange;
       border-bottom: 1px solid orange;
     }
+    .manage-admins-container {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    .custom-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 20px;
+      background-color: #333;
+      color: white;
+    }
+
+    .logo {
+      //height: 50px;
+      //width: 50px;
+      //transition: transform 0.3s ease;
+    }
+    .back-button {
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .back-button:hover {
+      background-color: #0056b3;
+    }
+
 </style>

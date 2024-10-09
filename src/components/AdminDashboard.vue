@@ -11,9 +11,9 @@
       <a href="/vans"><button>Manage Vans</button></a>
       <button>Manage Customers</button>
       <button>Manage Rentals</button>
-      <button>Manage Insurance</button>
-      <a href="/fleet-list"><button>Fleet And Rentals</button></a>
-      <button>Show all statistics</button>
+<!--      <button>Manage Insurance</button>-->
+<!--      <a href="/fleet-list"><button>Fleet And Rentals</button></a>-->
+<!--      <button>Show all statistics</button>-->
     </div>
 
     <Footer />
@@ -56,7 +56,9 @@ export default {
 }
 
 .logo {
-  height: 40px;
+  height: 50px;
+  width: auto;
+  transition: transform 0.3s ease;
 }
 
 .logout-button {

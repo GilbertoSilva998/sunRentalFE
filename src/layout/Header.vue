@@ -9,12 +9,12 @@
       <nav class="nav-links">
         <router-link to="/" class="nav-link">Home</router-link>
         <router-link to="/fleet" class="nav-link">Fleet</router-link>
-        <router-link to="/Booking" class="nav-link">Booking</router-link>
+        <router-link to="/Booking" class="nav-link">Book</router-link>
         <router-link to="/about" class="nav-link">About</router-link>
         <router-link to="/contactUs" class="nav-link">Contact Us</router-link>
 <!--<router-link to="/dashboard" class="nav-link">Dashboard</router-link>         -->
         <router-link to="/signup" class="nav-link">Sign Up</router-link>
-        <router-link to="/login" class="nav-link">Login</router-link>
+<!--        <router-link to="/login" class="nav-link">Login</router-link>-->
       </nav>
     </header>
     <router-view />

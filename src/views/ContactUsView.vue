@@ -98,7 +98,7 @@ export default {
       }
 
       try {
-        const response = await axios.post('http://localhost:8089/api/contact-message', this.form, {
+        const response = await axios.post('http://localhost:8080/api/contact-message', this.form, {
           headers: {
             'Content-Type': 'application/json'
           }

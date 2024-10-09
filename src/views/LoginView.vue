@@ -49,14 +49,13 @@ export default {
     async login() {
       if (this.role === 'admin') {
         try {
-          const response = await axios.post('http://localhost:8088/admin/login', null, {
+          const response = await axios.post('http://localhost:8080/admin/login', null, {
             params: {
               email: this.email,
               password: this.password
             }
           });
           if (response.data) {
-            // Admin login successful, navigate to admin dashboard
             this.$router.push('/admin-dashboard');
           } else {
             alert('Invalid email or password for admin.');
@@ -65,10 +64,26 @@ export default {
           console.error('Error during admin login:', error);
           alert('An error occurred during login. Please try again.');
         }
-      } else {
-        // Handle customer login (not covered in this implementation)
-        this.$router.push('/customer-dashboard');
+      } else if (this.role === 'customer') {
+        try {
+          const response = await axios.post('http://localhost:8080/customers/login', null, {
+            params: {
+              email: this.email,
+              password: this.password
+            }
+          });
+          if (response.data) {
+            this.responseMessage = 'Login successfully!';
+            this.$router.push('/Booking');
+          } else {
+            alert('Invalid email or password for admin.');
+          }
+        } catch (error) {
+          console.error('Error during customer login:', error);
+          alert('An error occurred during login. Please try again.');
+        }
       }
+
     },
   },
   name: 'Login',
