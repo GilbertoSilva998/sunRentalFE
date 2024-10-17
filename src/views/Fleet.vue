@@ -6,31 +6,29 @@
     <br/>
     <br/>
 
-<!--    Search Input Box-->
+    <!-- Search Input Box -->
     <div>
       <input
-      type="text"
-      v-model="searchQuery"
-      placeholder="Search by License Plate"
-      class="search-box"
+          type="text"
+          v-model="searchQuery"
+          placeholder="Search by License Plate"
+          class="search-box"
       />
     </div>
     <br/>
     <br/>
 
     <div class="fleet-list">
-<!--      Display Vans-->
+      <!-- Display Vans -->
       <div v-for="van in filteredFleet" :key="van.licensePlate" class="van-card">
         <img :src="`http://localhost:8080/van/image/${van.licensePlate}`" :alt="van.name" class="van-image" />
         <h2>{{ van.make }}</h2>
-        <p>{{van.licensePlate}}</p>
-        <p>Model: {{van.model}}</p>
+        <p>{{ van.licensePlate }}</p>
+        <p>Model: {{ van.model }}</p>
         <p>Year: {{ van.year }}</p>
         <p>Capacity: {{ van.capacity }}</p>
-        <a href="/Booking"><button>Book now</button></a>
-<!--        <p>Price per day: R{{ van.pricePerDay }}</p>-->
-<!--        <p v-if="van.rentalStatus" class="not-available">Rented</p>-->
-
+        <!-- Button to trigger booking -->
+        <button @click="redirectToBooking(van)">Book now</button>
       </div>
     </div>
 
@@ -41,7 +39,7 @@
 <script>
 import Footer from '@/layout/Footer.vue';
 import Header from '@/layout/Header.vue';
-import ApiService from '@/services/AxiosServiceVans';//Fetch all vans api
+import ApiService from '@/services/AxiosServiceVans'; // Fetch all vans API
 
 export default {
   name: 'Fleet',
@@ -51,34 +49,41 @@ export default {
   },
   data() {
     return {
-       fleet: [], //Initialize as an empty array
+      fleet: [], // Initialize as an empty array
       searchQuery: ''
-    }
+    };
   },
   computed: {
-    filteredFleet(){
+    filteredFleet() {
       return this.fleet.filter(van =>
-      van.licensePlate.toLowerCase().includes(this.searchQuery.toLowerCase())
+          van.licensePlate.toLowerCase().includes(this.searchQuery.toLowerCase())
       );
     }
   },
-  //Fetch the van the component is created
-  async created(){
+  // Fetch the van when the component is created
+  async created() {
     await this.fetchFleet();
   },
-  methods:{
+  methods: {
     // Method to fetch the vans from API
-    async fetchFleet(){
+    async fetchFleet() {
       try {
         const response = await ApiService.getVans('http://localhost:8080/van/allVans');
         this.fleet = response.data;
-      }catch (error){
+      } catch (error) {
         console.error('Error fetching fleet:', error);
       }
+    },
+    // Method to redirect to booking page with selected van
+    redirectToBooking(van) {
+      // Redirect to the Booking page and pass the selected van's details as query params
+      this.$router.push({
+        path: '/Booking',
+        query: { vanLicensePlate: van.licensePlate, vanModel: van.model }
+      });
     }
   }
-
-}
+};
 </script>
 
 <style scoped>
@@ -108,11 +113,4 @@ export default {
   border-radius: 8px;
 }
 
-.available {
-  color: green;
-}
-
-.not-available {
-  color: red;
-}
 </style>
