@@ -47,45 +47,46 @@ export default {
   },
   methods: {
     async login() {
-      if (this.role === 'admin') {
-        try {
-          const response = await axios.post('http://localhost:8080/admin/login', null, {
-            params: {
-              email: this.email,
-              password: this.password
-            }
-          });
-          if (response.data) {
-            this.$router.push('/admin-dashboard');
-          } else {
-            alert('Invalid email or password for admin.');
-          }
-        } catch (error) {
-          console.error('Error during admin login:', error);
-          alert('An error occurred during login. Please try again.');
-        }
-      } else if (this.role === 'customer') {
-        try {
-          const response = await axios.post('http://localhost:8080/customers/login', null, {
-            params: {
-              email: this.email,
-              password: this.password
-            }
-          });
-          if (response.data) {
-            this.responseMessage = 'Login successfully!';
-            this.$router.push('/Booking');
-          } else {
-            alert('Invalid email or password for admin.');
-          }
-        } catch (error) {
-          console.error('Error during customer login:', error);
-          alert('An error occurred during login. Please try again.');
-        }
-      }
+      try {
+        // Set the endpoint for admin login
+        const endpoint = 'http://localhost:8080/admin/login';
 
+        // Make the POST request with admin credentials
+        const response = await axios.post(endpoint, {
+          email: this.email,
+          password: this.password
+        });
+
+        // Log the response to check its structure
+        console.log('Response from server:', response.data);
+
+        // Check if the response contains a token
+        if (response.data) {
+          // Print the token to the console for debugging
+          console.log('Token received from server:', response.data);
+
+          // Store the token in local storage
+          localStorage.setItem('jwtToken', response.data);
+
+          // Set the Authorization header for future requests
+          axios.defaults.headers.common['Authorization'] = `Bearer ${response.data}`;
+
+          // Redirect to the admin dashboard after successful login
+          this.$router.push('/admin-dashboard');
+        } else {
+          // Log the response in case of invalid login
+          console.error('Login failed:', response.data);
+          alert('Invalid email or password.');
+        }
+
+      } catch (error) {
+        console.error('Error during login:', error);
+        alert('An error occurred during login. Please try again.');
+      }
     },
-  },
+  }
+
+  ,
   name: 'Login',
   components: {
     Header,

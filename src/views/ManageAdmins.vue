@@ -86,15 +86,24 @@ export default {
   methods: {
     async fetchAdmins() {
       try {
-        const response = await axios.get('http://localhost:8080/admin/allAdmins');
+        const response = await axios.get('http://localhost:8080/admin/allAdmins', {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('jwtToken')}`
+          }
+        });
         this.admins = response.data;
       } catch (error) {
         console.error('Error fetching admins:', error);
+        this.responseMessage = 'Failed to fetch admins.';
       }
     },
     async addAdmin() {
       try {
-        const response = await axios.post('http://localhost:8080/admin/create', this.admin);
+        const response = await axios.post('http://localhost:8080/admin/create', this.admin, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('jwtToken')}`
+          }
+        });
         this.admins.push(response.data);
         this.resetForm();
         this.responseMessage = 'Admin successfully added!';
@@ -105,7 +114,11 @@ export default {
     },
     async deleteAdminById() {
       try {
-        const response = await axios.delete(`http://localhost:8080/admin/delete/${this.adminIdToDelete}`);
+        const response = await axios.delete(`http://localhost:8080/admin/delete/${this.adminIdToDelete}`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('jwtToken')}`
+          }
+        });
         if (response.status === 200) {
           this.admins = this.admins.filter(admin => admin.adminId !== this.adminIdToDelete);
           this.responseMessage = 'Admin successfully deleted!';
@@ -119,7 +132,11 @@ export default {
     },
     async updateAdmin() {
       try {
-        const response = await axios.put('http://localhost:8080/admin/update', this.admin);
+        const response = await axios.put('http://localhost:8080/admin/update', this.admin, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('jwtToken')}`
+          }
+        });
         if (response.status === 200) {
           this.responseMessage = 'Admin successfully updated!';
           await this.fetchAdmins();
@@ -131,8 +148,7 @@ export default {
         console.error('Error updating admin:', error);
         this.responseMessage = 'Failed to update admin.';
       }
-    }
-    ,
+    },
     editAdmin(admin) {
       this.admin = { ...admin };
       this.isEditing = true;
@@ -166,7 +182,7 @@ export default {
   created() {
     this.fetchAdmins();
   }
-};
+  }
 </script>
 
 <style scoped>
