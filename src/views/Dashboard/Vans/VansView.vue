@@ -59,6 +59,10 @@
                 </select>
             </div>
 
+          <div class="form-group">
+            <input type="text" id="price" v-model="form.price" placeholder="Enter the Price" required>
+          </div>
+
           <br/>
           <label>Update the Van Image</label>
           <div>
@@ -90,6 +94,7 @@
           <th>Fuel Type</th> |
           <th>Status</th> |
           <th>Image</th> |
+          <th>Price</th> |
           <th>Actions</th>
 
         </tr>
@@ -104,6 +109,7 @@
           <td>{{ van.capacity }}</td> |
           <td>{{ van.fuelType }}</td> |
           <td>{{ van.rentalStatus }}</td> |
+          <td>{{ van.price }}</td> |
           <td>
             <img :src="`http://localhost:8080/van/image/${van.licensePlate}`" alt="image" width="100"  />
           </td>
@@ -147,6 +153,7 @@ export default {
           capacity: null,
           fuelType: '',
           rentalStatus: true,
+          price: null,
           image: [],
         },
         yearError: null,
@@ -185,7 +192,12 @@ export default {
         const response = await ApiService.getVans('http://localhost:8080/van/allVans');
         this.vanGet = response.data;
       }catch (error){
-        console.error('There was an error fetching vans!', error);
+        if(error.response && error.response.status === 401){
+          //Redirect to log in page if unauthorized
+          this.$router.push('/login');
+        }else {
+          console.error('There was an error fetching vans!', error);
+        }
       }
     },
     onFileChange(event) {
@@ -256,6 +268,7 @@ export default {
         capacity: null,
         fuelType: '',
         rentalStatus: true,
+        price: null,
         image: []
       };
           this.yearError = null; //Reset Error message
