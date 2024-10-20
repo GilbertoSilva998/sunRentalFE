@@ -48,8 +48,14 @@ export default {
   methods: {
     async login() {
       try {
+        let endpoint = '';
+
+        if(this.role === 'admin'){
+          endpoint = 'http://localhost:8080/admin/login';
+        }else if (this.role  === 'customer'){
+          endpoint = 'http://localhost:8080/customers/login'
+        }
         // Set the endpoint for admin login
-        const endpoint = 'http://localhost:8080/admin/login';
 
         // Make the POST request with admin credentials
         const response = await axios.post(endpoint, {
@@ -72,7 +78,12 @@ export default {
           axios.defaults.headers.common['Authorization'] = `Bearer ${response.data}`;
 
           // Redirect to the admin dashboard after successful login
-          this.$router.push('/admin-dashboard');
+          if (this.role === 'admin'){
+            this.$router.push('/admin-dashboard');
+          } else if (this.role === 'customer'){
+            this.$router.push('/Fleet');
+          }
+
         } else {
           // Log the response in case of invalid login
           console.error('Login failed:', response.data);

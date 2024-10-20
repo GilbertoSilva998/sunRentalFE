@@ -51,20 +51,23 @@
             <div class="form-group">
                 <input type="text" id="fuelType" v-model="form.fuelType" placeholder="Enter fuel type" required>
             </div>
-          <label>Rental Status</label>
+
+
             <div class="form-group">
+              <label>Rental Status: </label>
                 <select v-model="form.rentalStatus" required>
                   <option :value="true">Rented</option>
                   <option :value="false">Returned</option>
                 </select>
             </div>
 
+          <br/>
           <div class="form-group">
             <input type="text" id="price" v-model="form.price" placeholder="Enter the Price" required>
           </div>
 
           <br/>
-          <label>Update the Van Image</label>
+          <label>Add & Edit * Van Image *</label>
           <div>
             <input type="file" id="image" @change="onFileChange">
           </div>
@@ -93,8 +96,8 @@
           <th>Capacity</th> |
           <th>Fuel Type</th> |
           <th>Status</th> |
-          <th>Image</th> |
           <th>Price</th> |
+          <th>Image</th> |
           <th>Actions</th>
 
         </tr>
@@ -192,12 +195,13 @@ export default {
         const response = await ApiService.getVans('http://localhost:8080/van/allVans');
         this.vanGet = response.data;
       }catch (error){
-        if(error.response && error.response.status === 401){
-          //Redirect to log in page if unauthorized
-          this.$router.push('/login');
-        }else {
-          console.error('There was an error fetching vans!', error);
-        }
+        // if(error.response && error.response.status === 401){
+        //   //Redirect to log in page if unauthorized
+        //   this.$router.push('/login');
+        // }
+        // else {
+        //   console.error('There was an error fetching vans!', error);
+        // }
       }
     },
     onFileChange(event) {

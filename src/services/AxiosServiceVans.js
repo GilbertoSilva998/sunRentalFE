@@ -2,10 +2,10 @@ import axios from "axios";
 import config from "bootstrap/js/src/util/config";
 
 //Retrieve the Token
-function getToken(){
-    return localStorage.getItem('token'); //Store the token in local Storage
-
-}
+// function getToken(){
+//     return localStorage.getItem('token'); //Store the token in local Storage
+//
+// }
 
 export const apiClient= axios.create({
     baseURL: 'http://localhost:8080',
@@ -14,15 +14,15 @@ export const apiClient= axios.create({
     }
 });
 
-apiClient.interceptors.request.use(config => {
-    const token = getToken();
-    if (token) {
-        config.headers['Authorization'] = `Bearer ${token}`; //Add auth on header
-    }
-    return config;
-},error => {
-    return Promise.reject(error);
-});
+// apiClient.interceptors.request.use(config => {
+//     const token = getToken();
+//     if (token) {
+//         config.headers['Authorization'] = `Bearer ${token}`; //Add auth on header
+//     }
+//     return config;
+// },error => {
+//     return Promise.reject(error);
+// });
 
 export default {
     getVans(){

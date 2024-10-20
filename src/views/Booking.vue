@@ -35,6 +35,10 @@
           <div class="form-group">
             <input type="text" v-model="form.vanModel" readonly placeholder="Van Model" />
           </div>
+          <!-- Van Information (Price) -->
+<!--          <div class="form-group">-->
+<!--            <input type="number" v-model="form.vanPrice" readonly placeholder="Van Price" />-->
+<!--          </div>-->
           <!-- Pickup Date & Time -->
           <div class="form-group">
             <input type="datetime-local" v-model="form.pickupDateTime" required placeholder="Pick-up Date & Time*" />
@@ -58,6 +62,8 @@
 import axios from 'axios';
 import Footer from '@/layout/Footer.vue';
 import Header from '@/layout/Header.vue';
+import vansView from "@/views/Dashboard/Vans/VansView.vue";
+import axiosServiceVans from "@/services/AxiosServiceVans";
 
 export default {
   name: 'BookingPage',
@@ -68,12 +74,13 @@ export default {
   data() {
     return {
       form: {
-        firstName: '',
-        lastName: '',
-        phone: '',
-        email: '',
+        firstName: this.$route.query.firstName || '',
+        lastName: this.$route.query.lastName ||'',
+        phone: this.$route.query.phone || '',
+        email: this.$route.query.email || '',
         vanLicensePlate: this.$route.query.vanLicensePlate || '', // Get van license plate from query params
         vanModel: this.$route.query.vanModel || '', // Get van model from query params
+        vanPrice: Number (this.$route.query.vanPrice) || 0, // Get van price from query params
         pickupDateTime: '',
         dropOffDateTime: '',
       },
@@ -83,9 +90,9 @@ export default {
   methods: {
     async submitForm() {
       try {
-        await axios.post('http://localhost:8080/api/bookings', this.form, {
+        await axios.post('http://localhost:8080/api/bookings/create', this.form, {
           headers: {
-            'Content-Type': 'application/json',
+            //Authorization: `Bearer ${localStorage.getItem('jwtToken')}`
           },
         });
 // Handle success
@@ -106,6 +113,7 @@ export default {
         email: '',
         vanLicensePlate: this.$route.query.vanLicensePlate || '',
         vanModel: this.$route.query.vanModel || '',
+       // vanPrice: 0,
         pickupDateTime: '',
         dropOffDateTime: '',
       };
