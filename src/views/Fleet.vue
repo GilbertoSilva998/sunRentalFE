@@ -71,10 +71,6 @@ export default {
       try {
         const response = await ApiService.getVans('http://localhost:8080/van/allVans');
         this.fleet = response.data;
-        //this.form.vanPrice = response.data.price;
-        // if (this.fleet.length > 0 ){
-        //   this.form.vanPrice = this.fleet[0].price;
-        // }
       } catch (error) {
         console.error('Error fetching fleet:', error);
       }
@@ -83,21 +79,14 @@ export default {
     redirectToBooking(van) {
       // Redirect to the Booking page and pass the selected van's details as query params
       const customer = JSON.parse(localStorage.getItem('customer'));
-      console.log(customer);
+      console.log("Customer retrieve from localStorage", customer);
 
-      if (customer){
-
+      if (customer && customer.email){
         this.$router.push({
         path: '/Booking',
         query: {
-          firstName: customer.firstName,
-          lastName: customer.lastName,
-          phone: customer.phone,
-          email: customer.email,
+          customerEmail: customer.email,
           vanLicensePlate: van.licensePlate,
-          vanModel: van.model,
-          //vanPrice: van.vanPrice,
-
         }
       });
       }else {

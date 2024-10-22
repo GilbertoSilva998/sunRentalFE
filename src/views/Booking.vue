@@ -11,34 +11,14 @@
       </div>
       <div class="booking-form">
         <form class="register" @submit.prevent="submitForm">
-          <!-- First Name -->
+        <!-- Email-->
           <div class="form-group">
-            <input type="text" v-model="form.firstName" placeholder="First Name*" required />
-          </div>
-          <!-- Last Name -->
-          <div class="form-group">
-            <input type="text" v-model="form.lastName" placeholder="Last Name*" required />
-          </div>
-          <!-- Contact Number -->
-          <div class="form-group">
-            <input type="number" v-model="form.phone" placeholder="Contact Number*" required />
-          </div>
-          <!-- Email -->
-          <div class="form-group">
-            <input type="email" v-model="form.email" placeholder="Email Address*" required />
+            <input type="text" v-model="form.customerEmail" placeholder="Email Address*" required />
           </div>
           <!-- Van Information (License Plate) -->
           <div class="form-group">
             <input type="text" v-model="form.vanLicensePlate" readonly placeholder="Van License Plate" />
           </div>
-          <!-- Van Information (Model) -->
-          <div class="form-group">
-            <input type="text" v-model="form.vanModel" readonly placeholder="Van Model" />
-          </div>
-          <!-- Van Information (Price) -->
-<!--          <div class="form-group">-->
-<!--            <input type="number" v-model="form.vanPrice" readonly placeholder="Van Price" />-->
-<!--          </div>-->
           <!-- Pickup Date & Time -->
           <div class="form-group">
             <input type="datetime-local" v-model="form.pickupDateTime" required placeholder="Pick-up Date & Time*" />
@@ -70,69 +50,46 @@ export default {
     Footer,
   },
   data() {
+    console.log('Query Params on Booking Page: ', this.$route.query);
     return {
       form: {
-        firstName: '',
-        lastName: '',
-        phone: '',
-        email: '',
-        vanLicensePlate: '', // Get van license plate from query params
-        vanModel: '', // Get van model from query params
-        //vanPrice: Number (this.$route.query.vanPrice) || 0, // Get van price from query params
+        customerEmail: this.$route.query.customerEmail || '',
+        vanLicensePlate: this.$route.query.vanLicensePlate || '', // Get van license plate from query params
         pickupDateTime: '',
         dropOffDateTime: '',
       },
       responseMessage: '',
     };
   },
-  mounted() {
-
-    const {firstName, lastName, phone, email, vanLicensePlate, vanModel} = this.$route.query;
-
-    console.log('Booking Page Query Params: ', {
-      firstName,
-      lastName,
-      phone,
-      email,
-      vanLicensePlate,
-      vanModel
-    });
-
-    //Update
-    this.form.firstName = firstName || '';
-    this.form.lastName = lastName || '';
-    this.form.phone = phone || '';
-    this.form.email = email ||'';
-    this.form.vanLicensePlate = vanLicensePlate || '';
-    this.form.vanModel = vanModel || '';
-  },
   methods: {
     async submitForm() {
       try {
+
+        const token = localStorage.getItem('jwtToken');
+        console.log("JWT Token: ", token);
+
         await axios.post('http://localhost:8080/api/bookings/create', this.form, {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem('jwtToken')}`
+            Authorization: `Bearer ${token}`
           },
         });
         // Handle success
         this.responseMessage = 'Booking successfully submitted!';
         this.clearForm(); // Clear form after successful submission
-        } catch (error) {
+      } catch (error) {
         // Handle error
-        console.error('Error submitting booking:', error);
+        if(error.response){
+          console.error('Error submitting booking:', error.response.data);
+        }
+
         this.responseMessage = 'There was an error submitting your booking. Please try again.';
       }
     },
     clearForm() {
       // Clear form fields after submission
       this.form = {
-        firstName: '',
-        lastName: '',
-        phone:  '',
-        email: '',
+        customerEmail: '',
         vanLicensePlate: '',
-        vanModel:  '',
-       // vanPrice: Number (this.$route.query.vanPrice) ||,
         pickupDateTime: '',
         dropOffDateTime: '',
       };
