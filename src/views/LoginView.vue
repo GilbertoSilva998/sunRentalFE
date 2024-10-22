@@ -97,15 +97,7 @@ export default {
           if (this.role === 'admin'){
             this.$router.push('/admin-dashboard');
           } else if (this.role === 'customer'){
-            // const customer = {
-            //   firstName: this.firstName,
-            //   lastName: this.lastName,
-            //   phone: this.phone,
-            // //   email: this.email
-            // // }
-            // const customerResponse = await axios.get('http://localhost:8080/customers/login')
-            // const customer = customerResponse.data;
-            // localStorage.setItem('customer', JSON.stringify(customer));
+            // this is the updated part
             this.$router.push('/customer');
           }
 
