@@ -6,27 +6,26 @@
     <br />
     <div class="booking-page">
       <div class="booking-text">
-        <h2>Book Van - {{ form.van.model }} ({{ form.van.licensePlate }})</h2>
+        <h2>Book Van - {{ form.vanModel }} ({{ form.vanLicensePlate }})</h2>
         <p>Fill out the form below to complete your booking.</p>
       </div>
       <div class="booking-form">
         <form class="register" @submit.prevent="submitForm">
-          <!-- Email -->
+        <!-- Email-->
           <div class="form-group">
-            <input type="email" v-model="form.customerEmail" placeholder="Email Address*" required />
+            <input type="text" v-model="form.customerEmail" placeholder="Email Address*" required />
           </div>
           <!-- Van Information (License Plate) -->
           <div class="form-group">
-            <input type="text" v-model="form.van.licensePlate" readonly placeholder="Van License Plate" />
+            <input type="text" v-model="form.vanLicensePlate" readonly placeholder="Van License Plate" />
           </div>
-
           <!-- Pickup Date & Time -->
           <div class="form-group">
-            <input type="datetime-local" v-model="form.startDate" required placeholder="Pick-up Date & Time*" />
+            <input type="datetime-local" v-model="form.pickupDateTime" required placeholder="Pick-up Date & Time*" />
           </div>
           <!-- Drop-off Date & Time -->
           <div class="form-group">
-            <input type="datetime-local" v-model="form.endDate" required placeholder="Drop-off Date & Time*" />
+            <input type="datetime-local" v-model="form.dropOffDateTime" required placeholder="Drop-off Date & Time*" />
           </div>
           <!-- Submit Button -->
           <button type="submit">Book Now</button>
@@ -51,14 +50,13 @@ export default {
     Footer,
   },
   data() {
+    console.log('Query Params on Booking Page: ', this.$route.query);
     return {
       form: {
-        customerEmail: this.$route.query.email || '', // Only email field for customer
-        van: {
-          licensePlate: this.$route.query.vanLicensePlate || '',
-        },
-        startDate: '',
-        endDate: '',
+        customerEmail: this.$route.query.customerEmail || '',
+        vanLicensePlate: this.$route.query.vanLicensePlate || '', // Get van license plate from query params
+        pickupDateTime: '',
+        dropOffDateTime: '',
       },
       responseMessage: '',
     };
@@ -66,40 +64,37 @@ export default {
   methods: {
     async submitForm() {
       try {
-        const bookingData = {
-          startDate: new Date(this.form.startDate).toISOString(),
-          endDate: new Date(this.form.endDate).toISOString(),
-          van: {
-            licensePlate: this.form.van.licensePlate,
+
+        const token = localStorage.getItem('jwtToken');
+        console.log("JWT Token: ", token);
+
+        await axios.post('http://localhost:8080/api/bookings/create', this.form, {
+          headers: {
+            Authorization: `Bearer ${token}`
           },
-          customerEmail: this.form.customerEmail, // Use email directly
-        };
-
-        // Log the data being sent
-        console.log("Booking data:", bookingData);
-
-        await axios.post('http://localhost:8080/api/bookings/create', bookingData);
-
+        });
+        // Handle success
         this.responseMessage = 'Booking successfully submitted!';
-        this.clearForm();
+        this.clearForm(); // Clear form after successful submission
       } catch (error) {
-        console.error('Error submitting booking:', error);
+        // Handle error
+        if(error.response){
+          console.error('Error submitting booking:', error.response.data);
+        }
+
         this.responseMessage = 'There was an error submitting your booking. Please try again.';
       }
     },
-
     clearForm() {
       // Clear form fields after submission
       this.form = {
         customerEmail: '',
-        van: {
-          licensePlate: this.$route.query.vanLicensePlate || '',
-        },
-        startDate: '',
-        endDate: '',
+        vanLicensePlate: '',
+        pickupDateTime: '',
+        dropOffDateTime: '',
       };
-    },
-  },
+    }
+  }
 };
 </script>
 

@@ -55,9 +55,6 @@ export default {
       email: '',
       password: '',
       role: 'customer', // Default to customer
-      firstName: '',
-      lastName: '',
-      phone: '',
     };
   },
   methods: {
@@ -94,19 +91,15 @@ export default {
           axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
           // Redirect to the Admin & Customer after successful login
-          if (this.role === 'admin'){
-            this.$router.push('/admin-dashboard');
-          } else if (this.role === 'customer'){
-            // const customer = {
-            //   firstName: this.firstName,
-            //   lastName: this.lastName,
-            //   phone: this.phone,
-            //   email: this.email
-            // }
-            const customerResponse = await axios.get('http://localhost:8080/customers/allCustomers')
+          if (this.role === 'customer'){
+            const customerResponse = await axios.get('http://localhost:8080/customers/findByEmail')
             const customer = customerResponse.data;
             localStorage.setItem('customer', JSON.stringify(customer));
             this.$router.push('/Fleet');
+
+
+          } else if (this.role === 'admin'){
+            this.$router.push('/admin-dashboard');
           }
 
         } else {
