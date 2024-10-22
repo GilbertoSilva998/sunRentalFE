@@ -11,7 +11,7 @@
       </div>
       <div class="booking-form">
         <form class="register" @submit.prevent="submitForm">
-        <!-- Email-->
+          <!-- Email -->
           <div class="form-group">
             <input type="text" v-model="form.customerEmail" placeholder="Email Address*" required />
           </div>
@@ -19,13 +19,13 @@
           <div class="form-group">
             <input type="text" v-model="form.vanLicensePlate" readonly placeholder="Van License Plate" />
           </div>
-          <!-- Pickup Date & Time -->
+          <!-- Pickup Date -->
           <div class="form-group">
-            <input type="datetime-local" v-model="form.pickupDateTime" required placeholder="Pick-up Date & Time*" />
+            <input type="date" v-model="form.pickupDate" required placeholder="Pick-up Date*" />
           </div>
-          <!-- Drop-off Date & Time -->
+          <!-- Drop-off Date -->
           <div class="form-group">
-            <input type="datetime-local" v-model="form.dropOffDateTime" required placeholder="Drop-off Date & Time*" />
+            <input type="date" v-model="form.dropOffDate" required placeholder="Drop-off Date*" />
           </div>
           <!-- Submit Button -->
           <button type="submit">Book Now</button>
@@ -50,13 +50,12 @@ export default {
     Footer,
   },
   data() {
-    console.log('Query Params on Booking Page: ', this.$route.query);
     return {
       form: {
         customerEmail: this.$route.query.customerEmail || '',
         vanLicensePlate: this.$route.query.vanLicensePlate || '', // Get van license plate from query params
-        pickupDateTime: '',
-        dropOffDateTime: '',
+        pickupDate: '',  // Changed to 'date' type
+        dropOffDate: '',  // Changed to 'date' type
       },
       responseMessage: '',
     };
@@ -64,21 +63,28 @@ export default {
   methods: {
     async submitForm() {
       try {
-
         const token = localStorage.getItem('jwtToken');
-        console.log("JWT Token: ", token);
 
-        await axios.post('http://localhost:8080/api/bookings/create', this.form, {
+        // Prepare data to match backend's expected structure
+        const bookingData = {
+          customerEmail: this.form.customerEmail,
+          vanLicensePlate: this.form.vanLicensePlate,
+          startDate: this.form.pickupDate, // Send only the date
+          endDate: this.form.dropOffDate, // Send only the date
+        };
+
+        await axios.post('http://localhost:8080/api/bookings/create', bookingData, {
           headers: {
-            Authorization: `Bearer ${token}`
+            Authorization: `Bearer ${token}`,
           },
         });
+
         // Handle success
         this.responseMessage = 'Booking successfully submitted!';
         this.clearForm(); // Clear form after successful submission
       } catch (error) {
         // Handle error
-        if(error.response){
+        if (error.response) {
           console.error('Error submitting booking:', error.response.data);
         }
 
@@ -90,11 +96,11 @@ export default {
       this.form = {
         customerEmail: '',
         vanLicensePlate: '',
-        pickupDateTime: '',
-        dropOffDateTime: '',
+        pickupDate: '',
+        dropOffDate: '',
       };
-    }
-  }
+    },
+  },
 };
 </script>
 
