@@ -9,14 +9,6 @@
       <div class="login-container">
         <h1>Login</h1>
         <form @submit.prevent="login" class="login-form">
-<!--          <div class="form-group">-->
-<!--            <label>F N:</label>-->
-<!--            <input type="text" v-model="firstName" required />-->
-<!--          </div>-->
-<!--          <div class="form-group">-->
-<!--            <label>L N:</label>-->
-<!--            <input type="text" v-model="lastName" required />-->
-<!--          </div>-->
           <div class="form-group">
             <label>Email:</label>
             <input type="email" v-model="email" required />
@@ -25,10 +17,6 @@
             <label>Password:</label>
             <input type="password" v-model="password" required />
           </div>
-<!--          <div class="form-group">-->
-<!--            <label>Co :</label>-->
-<!--            <input type="number" v-model="phone" required />-->
-<!--          </div>-->
           <div class="form-group">
             <label>Login as:</label>
             <select v-model="role" required>
@@ -55,64 +43,49 @@ export default {
       email: '',
       password: '',
       role: 'customer', // Default to customer
-      firstName: '',
-      lastName: '',
-      phone: '',
     };
   },
   methods: {
     async login() {
       try {
         let endpoint = '';
-
-        if(this.role === 'admin'){
+        if (this.role === 'admin') {
           endpoint = 'http://localhost:8080/admin/login';
-        }else if (this.role  === 'customer'){
-          endpoint = 'http://localhost:8080/customers/login'
+        } else if (this.role === 'customer') {
+          endpoint = 'http://localhost:8080/customers/login';
+        } else {
+          alert('Please select a valid role.');
+          return;
         }
-        // Set the endpoint for admin login
 
-        // Make the POST request with admin credentials
         const response = await axios.post(endpoint, {
           email: this.email,
           password: this.password
         });
 
-        // Log the response to check its structure
-        console.log('Response from server:', response);
+        if (response.data && response.data.token) {
+          // Store the token in local storage for future requests
+          localStorage.setItem('jwtToken', response.data.token);
 
-        // Check if the response contains a token
-        if ( response.data) {
-          // Print the token to the console for debugging
-          const token = response.data;
-          console.log('Token received from server:', token);
+          // Set the Authorization header in Axios for all future requests
+          axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`;
 
-          // Store the token in local storage
-          localStorage.setItem('jwtToken', token);
-
-          // Set the Authorization header for future requests
-          axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-
-          // Redirect to the Admin & Customer after successful login
-          if (this.role === 'admin'){
+          // Redirect based on the role
+          if (this.role === 'admin') {
             this.$router.push('/admin-dashboard');
-          } else if (this.role === 'customer'){
-            // this is the updated part here
-            this.$router.push('/customer');
+          } else if (this.role === 'customer') {
+            this.$router.push('/Booking');
           }
-
         } else {
-          // Log the response in case of invalid login
-          console.error('Login failed:', response.data);
           alert('Invalid email or password.');
         }
-
       } catch (error) {
         console.error('Error during login:', error);
         alert('An error occurred during login. Please try again.');
       }
     },
-  },
+  }
+,
   name: 'Login',
   components: {
     Header,
