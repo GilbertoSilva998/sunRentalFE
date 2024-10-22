@@ -9,7 +9,7 @@ export const apiClient = axios.create({
 
 export default {
     getAllCustomers() {
-        return apiClient.get('/Customer');
+        return apiClient.get('/customers/allCustomers');
     },
     getCustomerById(id) {
         return apiClient.get(`/Customer/${id}`);
