@@ -71,32 +71,20 @@ export default {
       try {
         const response = await ApiService.getVans('http://localhost:8080/van/allVans');
         this.fleet = response.data;
-        //this.form.vanPrice = response.data.price;
-        // if (this.fleet.length > 0 ){
-        //   this.form.vanPrice = this.fleet[0].price;
-        // }
       } catch (error) {
         console.error('Error fetching fleet:', error);
       }
-    },
-    // Method to redirect to booking page with selected customer
-    redirectToBookingCustomer(customer){
-      this.$router.push({
-        path:'/Booking',
-        query: {
-                firstName: customer.firstName,
-                lastName: customer.lastName,
-                phone: customer.phone,
-                email: customer.email,
-                }
-      })
     },
     // Method to redirect to booking page with selected van
     redirectToBooking(van) {
       // Redirect to the Booking page and pass the selected van's details as query params
       this.$router.push({
         path: '/Booking',
-        query: { vanLicensePlate: van.licensePlate, vanModel: van.model, vanPrice: van.vanPrice }
+        query: {
+          vanLicensePlate: van.licensePlate,
+          vanModel: van.model,
+          vanPrice: van.price // Ensure correct property for price
+        }
       });
     }
   }
@@ -129,5 +117,4 @@ export default {
   height: auto;
   border-radius: 8px;
 }
-
 </style>

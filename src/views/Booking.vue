@@ -13,39 +13,39 @@
         <form class="register" @submit.prevent="submitForm">
           <!-- First Name -->
           <div class="form-group">
-            <input type="text" v-model="form.firstName" placeholder="First Name*" required />
+            <input type="text" v-model="form.customer.firstName" placeholder="First Name*" required />
           </div>
           <!-- Last Name -->
           <div class="form-group">
-            <input type="text" v-model="form.lastName" placeholder="Last Name*" required />
+            <input type="text" v-model="form.customer.lastName" placeholder="Last Name*" required />
           </div>
           <!-- Contact Number -->
           <div class="form-group">
-            <input type="tel" v-model="form.phone" placeholder="Contact Number*" required />
+            <input type="tel" v-model="form.customer.phone" placeholder="Contact Number*" required />
           </div>
           <!-- Email -->
           <div class="form-group">
-            <input type="email" v-model="form.email" placeholder="Email Address*" required />
+            <input type="email" v-model="form.customer.email" placeholder="Email Address*" required />
           </div>
           <!-- Van Information (License Plate) -->
           <div class="form-group">
-            <input type="text" v-model="form.vanLicensePlate" readonly placeholder="Van License Plate" />
+            <input type="text" v-model="form.van.licensePlate" readonly placeholder="Van License Plate" />
           </div>
           <!-- Van Information (Model) -->
           <div class="form-group">
-            <input type="text" v-model="form.vanModel" readonly placeholder="Van Model" />
+            <input type="text" v-model="form.van.model" readonly placeholder="Van Model" />
           </div>
           <!-- Van Information (Price) -->
-<!--          <div class="form-group">-->
-<!--            <input type="number" v-model="form.vanPrice" readonly placeholder="Van Price" />-->
-<!--          </div>-->
+          <div class="form-group">
+            <input type="number" v-model="form.van.price" readonly placeholder="Van Price" />
+          </div>
           <!-- Pickup Date & Time -->
           <div class="form-group">
-            <input type="datetime-local" v-model="form.pickupDateTime" required placeholder="Pick-up Date & Time*" />
+            <input type="datetime-local" v-model="form.startDate" required placeholder="Pick-up Date & Time*" />
           </div>
           <!-- Drop-off Date & Time -->
           <div class="form-group">
-            <input type="datetime-local" v-model="form.dropOffDateTime" required placeholder="Drop-off Date & Time*" />
+            <input type="datetime-local" v-model="form.endDate" required placeholder="Drop-off Date & Time*" />
           </div>
           <!-- Submit Button -->
           <button type="submit">Book Now</button>
@@ -62,8 +62,6 @@
 import axios from 'axios';
 import Footer from '@/layout/Footer.vue';
 import Header from '@/layout/Header.vue';
-import vansView from "@/views/Dashboard/Vans/VansView.vue";
-import axiosServiceVans from "@/services/AxiosServiceVans";
 
 export default {
   name: 'BookingPage',
@@ -74,15 +72,19 @@ export default {
   data() {
     return {
       form: {
-        firstName: this.$route.query.firstName || '',
-        lastName: this.$route.query.lastName ||'',
-        phone: this.$route.query.phone || '',
-        email: this.$route.query.email || '',
-        vanLicensePlate: this.$route.query.vanLicensePlate || '', // Get van license plate from query params
-        vanModel: this.$route.query.vanModel || '', // Get van model from query params
-        vanPrice: Number (this.$route.query.vanPrice) || 0, // Get van price from query params
-        pickupDateTime: '',
-        dropOffDateTime: '',
+        customer: {
+          firstName: this.$route.query.firstName || '',
+          lastName: this.$route.query.lastName || '',
+          phone: this.$route.query.phone || '',
+          email: this.$route.query.email || '',
+        },
+        van: {
+          licensePlate: this.$route.query.vanLicensePlate || '',
+          model: this.$route.query.vanModel || '',
+          price: Number(this.$route.query.vanPrice) || 0,
+        },
+        startDate: '',
+        endDate: '',
       },
       responseMessage: '',
     };
@@ -90,35 +92,53 @@ export default {
   methods: {
     async submitForm() {
       try {
-        await axios.post('http://localhost:8080/api/bookings/create', this.form, {
-          headers: {
-            //Authorization: `Bearer ${localStorage.getItem('jwtToken')}`
+        // Prepare booking data
+        const bookingData = {
+          startDate: new Date(this.form.startDate).toISOString(),
+          endDate: new Date(this.form.endDate).toISOString(),
+          totalPrice: this.form.van.price,
+          van: {
+            licensePlate: this.form.van.licensePlate,
           },
-        });
-// Handle success
+          customer: {
+            firstName: this.form.customer.firstName,
+            lastName: this.form.customer.lastName,
+            phone: this.form.customer.phone,
+            email: this.form.customer.email,
+          },
+        };
+
+        // Send booking request as POST, not GET
+        await axios.post('http://localhost:8080/api/bookings/create', bookingData);
+
+        // Success
         this.responseMessage = 'Booking successfully submitted!';
-        this.clearForm(); // Clear form after successful submission
+        this.clearForm();
       } catch (error) {
-        // Handle error
         console.error('Error submitting booking:', error);
         this.responseMessage = 'There was an error submitting your booking. Please try again.';
       }
     },
+
     clearForm() {
       // Clear form fields after submission
       this.form = {
-        firstName: '',
-        lastName: '',
-        phone: '',
-        email: '',
-        vanLicensePlate: this.$route.query.vanLicensePlate || '',
-        vanModel: this.$route.query.vanModel || '',
-       // vanPrice: 0,
-        pickupDateTime: '',
-        dropOffDateTime: '',
+        customer: {
+          firstName: '',
+          lastName: '',
+          phone: '',
+          email: '',
+        },
+        van: {
+          licensePlate: this.$route.query.vanLicensePlate || '',
+          model: this.$route.query.vanModel || '',
+          price: Number(this.$route.query.vanPrice) || 0,
+        },
+        startDate: '',
+        endDate: '',
       };
-    }
-  }
+    },
+  },
 };
 </script>
 
