@@ -9,6 +9,14 @@
       <div class="login-container">
         <h1>Login</h1>
         <form @submit.prevent="login" class="login-form">
+<!--          <div class="form-group">-->
+<!--            <label>F N:</label>-->
+<!--            <input type="text" v-model="firstName" required />-->
+<!--          </div>-->
+<!--          <div class="form-group">-->
+<!--            <label>L N:</label>-->
+<!--            <input type="text" v-model="lastName" required />-->
+<!--          </div>-->
           <div class="form-group">
             <label>Email:</label>
             <input type="email" v-model="email" required />
@@ -17,6 +25,10 @@
             <label>Password:</label>
             <input type="password" v-model="password" required />
           </div>
+<!--          <div class="form-group">-->
+<!--            <label>Co :</label>-->
+<!--            <input type="number" v-model="phone" required />-->
+<!--          </div>-->
           <div class="form-group">
             <label>Login as:</label>
             <select v-model="role" required>
@@ -43,6 +55,9 @@ export default {
       email: '',
       password: '',
       role: 'customer', // Default to customer
+      firstName: '',
+      lastName: '',
+      phone: '',
     };
   },
   methods: {
@@ -64,23 +79,33 @@ export default {
         });
 
         // Log the response to check its structure
-        console.log('Response from server:', response.data);
+        console.log('Response from server:', response);
 
         // Check if the response contains a token
-        if (response.data) {
+        if ( response.data) {
           // Print the token to the console for debugging
-          console.log('Token received from server:', response.data);
+          const token = response.data;
+          console.log('Token received from server:', token);
 
           // Store the token in local storage
-          localStorage.setItem('jwtToken', response.data);
+          localStorage.setItem('jwtToken', token);
 
           // Set the Authorization header for future requests
-          axios.defaults.headers.common['Authorization'] = `Bearer ${response.data}`;
+          axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
-          // Redirect to the admin dashboard after successful login
+          // Redirect to the Admin & Customer after successful login
           if (this.role === 'admin'){
             this.$router.push('/admin-dashboard');
           } else if (this.role === 'customer'){
+            // const customer = {
+            //   firstName: this.firstName,
+            //   lastName: this.lastName,
+            //   phone: this.phone,
+            //   email: this.email
+            // }
+            const customerResponse = await axios.get('http://localhost:8080/customers/allCustomers')
+            const customer = customerResponse.data;
+            localStorage.setItem('customer', JSON.stringify(customer));
             this.$router.push('/Fleet');
           }
 
@@ -95,9 +120,7 @@ export default {
         alert('An error occurred during login. Please try again.');
       }
     },
-  }
-
-  ,
+  },
   name: 'Login',
   components: {
     Header,

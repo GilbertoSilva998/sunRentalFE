@@ -21,7 +21,7 @@
           </div>
           <!-- Contact Number -->
           <div class="form-group">
-            <input type="tel" v-model="form.phone" placeholder="Contact Number*" required />
+            <input type="number" v-model="form.phone" placeholder="Contact Number*" required />
           </div>
           <!-- Email -->
           <div class="form-group">
@@ -62,8 +62,6 @@
 import axios from 'axios';
 import Footer from '@/layout/Footer.vue';
 import Header from '@/layout/Header.vue';
-import vansView from "@/views/Dashboard/Vans/VansView.vue";
-import axiosServiceVans from "@/services/AxiosServiceVans";
 
 export default {
   name: 'BookingPage',
@@ -74,31 +72,52 @@ export default {
   data() {
     return {
       form: {
-        firstName: this.$route.query.firstName || '',
-        lastName: this.$route.query.lastName ||'',
-        phone: this.$route.query.phone || '',
-        email: this.$route.query.email || '',
-        vanLicensePlate: this.$route.query.vanLicensePlate || '', // Get van license plate from query params
-        vanModel: this.$route.query.vanModel || '', // Get van model from query params
-        vanPrice: Number (this.$route.query.vanPrice) || 0, // Get van price from query params
+        firstName: '',
+        lastName: '',
+        phone: '',
+        email: '',
+        vanLicensePlate: '', // Get van license plate from query params
+        vanModel: '', // Get van model from query params
+        //vanPrice: Number (this.$route.query.vanPrice) || 0, // Get van price from query params
         pickupDateTime: '',
         dropOffDateTime: '',
       },
       responseMessage: '',
     };
   },
+  mounted() {
+
+    const {firstName, lastName, phone, email, vanLicensePlate, vanModel} = this.$route.query;
+
+    console.log('Booking Page Query Params: ', {
+      firstName,
+      lastName,
+      phone,
+      email,
+      vanLicensePlate,
+      vanModel
+    });
+
+    //Update
+    this.form.firstName = firstName || '';
+    this.form.lastName = lastName || '';
+    this.form.phone = phone || '';
+    this.form.email = email ||'';
+    this.form.vanLicensePlate = vanLicensePlate || '';
+    this.form.vanModel = vanModel || '';
+  },
   methods: {
     async submitForm() {
       try {
         await axios.post('http://localhost:8080/api/bookings/create', this.form, {
           headers: {
-            //Authorization: `Bearer ${localStorage.getItem('jwtToken')}`
+            Authorization: `Bearer ${localStorage.getItem('jwtToken')}`
           },
         });
-// Handle success
+        // Handle success
         this.responseMessage = 'Booking successfully submitted!';
         this.clearForm(); // Clear form after successful submission
-      } catch (error) {
+        } catch (error) {
         // Handle error
         console.error('Error submitting booking:', error);
         this.responseMessage = 'There was an error submitting your booking. Please try again.';
@@ -109,11 +128,11 @@ export default {
       this.form = {
         firstName: '',
         lastName: '',
-        phone: '',
+        phone:  '',
         email: '',
-        vanLicensePlate: this.$route.query.vanLicensePlate || '',
-        vanModel: this.$route.query.vanModel || '',
-       // vanPrice: 0,
+        vanLicensePlate: '',
+        vanModel:  '',
+       // vanPrice: Number (this.$route.query.vanPrice) ||,
         pickupDateTime: '',
         dropOffDateTime: '',
       };

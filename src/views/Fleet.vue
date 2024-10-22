@@ -79,25 +79,30 @@ export default {
         console.error('Error fetching fleet:', error);
       }
     },
-    // Method to redirect to booking page with selected customer
-    redirectToBookingCustomer(customer){
-      this.$router.push({
-        path:'/Booking',
-        query: {
-                firstName: customer.firstName,
-                lastName: customer.lastName,
-                phone: customer.phone,
-                email: customer.email,
-                }
-      })
-    },
-    // Method to redirect to booking page with selected van
+    // Method to redirect to booking page with selected customer & van
     redirectToBooking(van) {
       // Redirect to the Booking page and pass the selected van's details as query params
-      this.$router.push({
+      const customer = JSON.parse(localStorage.getItem('customer'));
+      console.log(customer);
+
+      if (customer){
+
+        this.$router.push({
         path: '/Booking',
-        query: { vanLicensePlate: van.licensePlate, vanModel: van.model, vanPrice: van.vanPrice }
+        query: {
+          firstName: customer.firstName,
+          lastName: customer.lastName,
+          phone: customer.phone,
+          email: customer.email,
+          vanLicensePlate: van.licensePlate,
+          vanModel: van.model,
+          //vanPrice: van.vanPrice,
+
+        }
       });
+      }else {
+        alert ('Please log in to proceed with booking');
+      }
     }
   }
 };
