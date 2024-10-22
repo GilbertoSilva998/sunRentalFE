@@ -97,7 +97,7 @@ export default {
           if (this.role === 'admin'){
             this.$router.push('/admin-dashboard');
           } else if (this.role === 'customer'){
-            // this is the updated part
+            // this is the updated part here
             this.$router.push('/customer');
           }
 
