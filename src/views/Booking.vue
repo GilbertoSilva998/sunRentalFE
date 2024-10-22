@@ -6,39 +6,20 @@
     <br />
     <div class="booking-page">
       <div class="booking-text">
-        <h2>Book Van - {{ form.vanModel }} ({{ form.vanLicensePlate }})</h2>
+        <h2>Book Van - {{ form.van.model }} ({{ form.van.licensePlate }})</h2>
         <p>Fill out the form below to complete your booking.</p>
       </div>
       <div class="booking-form">
         <form class="register" @submit.prevent="submitForm">
-          <!-- First Name -->
-          <div class="form-group">
-            <input type="text" v-model="form.customer.firstName" placeholder="First Name*" required />
-          </div>
-          <!-- Last Name -->
-          <div class="form-group">
-            <input type="text" v-model="form.customer.lastName" placeholder="Last Name*" required />
-          </div>
-          <!-- Contact Number -->
-          <div class="form-group">
-            <input type="tel" v-model="form.customer.phone" placeholder="Contact Number*" required />
-          </div>
           <!-- Email -->
           <div class="form-group">
-            <input type="email" v-model="form.customer.email" placeholder="Email Address*" required />
+            <input type="email" v-model="form.customerEmail" placeholder="Email Address*" required />
           </div>
           <!-- Van Information (License Plate) -->
           <div class="form-group">
             <input type="text" v-model="form.van.licensePlate" readonly placeholder="Van License Plate" />
           </div>
-          <!-- Van Information (Model) -->
-          <div class="form-group">
-            <input type="text" v-model="form.van.model" readonly placeholder="Van Model" />
-          </div>
-          <!-- Van Information (Price) -->
-          <div class="form-group">
-            <input type="number" v-model="form.van.price" readonly placeholder="Van Price" />
-          </div>
+
           <!-- Pickup Date & Time -->
           <div class="form-group">
             <input type="datetime-local" v-model="form.startDate" required placeholder="Pick-up Date & Time*" />
@@ -72,16 +53,9 @@ export default {
   data() {
     return {
       form: {
-        customer: {
-          firstName: this.$route.query.firstName || '',
-          lastName: this.$route.query.lastName || '',
-          phone: this.$route.query.phone || '',
-          email: this.$route.query.email || '',
-        },
+        customerEmail: this.$route.query.email || '', // Only email field for customer
         van: {
           licensePlate: this.$route.query.vanLicensePlate || '',
-          model: this.$route.query.vanModel || '',
-          price: Number(this.$route.query.vanPrice) || 0,
         },
         startDate: '',
         endDate: '',
@@ -92,26 +66,20 @@ export default {
   methods: {
     async submitForm() {
       try {
-        // Prepare booking data
         const bookingData = {
           startDate: new Date(this.form.startDate).toISOString(),
           endDate: new Date(this.form.endDate).toISOString(),
-          totalPrice: this.form.van.price,
           van: {
             licensePlate: this.form.van.licensePlate,
           },
-          customer: {
-            firstName: this.form.customer.firstName,
-            lastName: this.form.customer.lastName,
-            phone: this.form.customer.phone,
-            email: this.form.customer.email,
-          },
+          customerEmail: this.form.customerEmail, // Use email directly
         };
 
-        // Send booking request as POST, not GET
+        // Log the data being sent
+        console.log("Booking data:", bookingData);
+
         await axios.post('http://localhost:8080/api/bookings/create', bookingData);
 
-        // Success
         this.responseMessage = 'Booking successfully submitted!';
         this.clearForm();
       } catch (error) {
@@ -123,16 +91,9 @@ export default {
     clearForm() {
       // Clear form fields after submission
       this.form = {
-        customer: {
-          firstName: '',
-          lastName: '',
-          phone: '',
-          email: '',
-        },
+        customerEmail: '',
         van: {
           licensePlate: this.$route.query.vanLicensePlate || '',
-          model: this.$route.query.vanModel || '',
-          price: Number(this.$route.query.vanPrice) || 0,
         },
         startDate: '',
         endDate: '',
